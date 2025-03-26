@@ -26,5 +26,5 @@ if __name__ == '__main__':
     grammar = input.G
     lengths = compute_lengths(grammar)
     print(lengths)
-    S = compute_all_pairs(G)
+    S = compute_all_pairs(grammar)
     print(S)
