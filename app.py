@@ -31,10 +31,24 @@ def compute_descending_nonterminals(lengths):
     desc_nonterminals = sorted(lengths, key=lengths.get, reverse=True) # sort nonterminals in descending order according to |w_A|
     return desc_nonterminals
 
+def compute_rel(S):
+    rel = []
+    for pair in S:
+        rel.append((pair[0], pair[1], 0))  # Create a relation (A,B,0) for each pair in the set S
+    return rel
+
+def compute_split(A, r):
+    split = ()
+    ...
+
+def compute_compact(r):
+    compact = ()
+    ...
+
 
 if __name__ == '__main__':
     # input
-    grammar = input.G # grammar G which defines a set of words
+    grammar = input.G[0] # grammar G which defines a set of words
     S = compute_all_pairs(grammar) # set S of pairs of nonterminals from G
     print(f'set S = {S}')
 
@@ -47,9 +61,22 @@ if __name__ == '__main__':
 
     # begin
     lengths = compute_lengths(grammar) # compute |w_A| for each nonterminal A
-    # print(lengths)
+    print(lengths)
+    
     if not check_lengths(S, lengths): # if there is (A, B) in S such that |w_A| != |w_B| then return false
         sys.exit(False)
 
-    desc_nonterminals = compute_descending_nonterminals(lengths) # ( A_1, ..., A_n)
-    print(desc_nonterminals)
+    desc_nonterminals = compute_descending_nonterminals(lengths) # ( A_1, ..., A_n) in descending order according to |w_A|
+    print(f'(A1, ..., An) := {desc_nonterminals}')
+
+    rel = compute_rel(S) # compute relation rel := U(A,B) in S (A, B, 0); 
+    print(f'rel := {rel}')
+
+    # compute split and compact for each Ai with each (A, B) in rel until there are no nonterminals in triples of tel
+    for A in desc_nonterminals:
+        for r in rel:
+            r = compute_split(A, r)
+            r = compute_compact(r)
+            # print(f'compact := {r}')
+    
+    ...

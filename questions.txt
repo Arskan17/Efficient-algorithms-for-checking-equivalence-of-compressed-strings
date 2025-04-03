@@ -1,0 +1,16 @@
+1. For the pair (A,B), are A and B supposed to be from the same grammar?
+    b/c if that's the case, wouldn't the length check (|w_A| = |w_B|) almost always return false atleast once? wouldn't that be pointless ?
+
+2. Again, related to #1, wouldn't doing the split(A, rel) also be pointless, given that A is from the grammar?
+
+3. What exactly is  rel:=U(A,B) in S (A, B, 0) ?
+    is 0 any arbitrary number or does it depends on something?
+
+4. Does the loop checks for every Ai in (A1,..., An) against every tripple in rel ?
+    is this a nested loop situation or am I looking at it wrong ?
+
+5. The proof of Theorem 12.
+
+6. Since the grammar must be in CNF and can contain useless nonterminals, should those be included in the pairs?
+    if so, wouldn't pairs with useless nonterminal just be simply a nonterminal?
+    how does that help ?
