@@ -42,48 +42,63 @@ def compute_rel(rel, pair, i):
     return rel
 
 def compute_split(A, rel, merged_lengths_dict, E, F):
-    for pair in rel.keys():
-        if A != pair[0] and A != pair[1]: # Case A!= B and A!=C
+    for pair in list(rel.keys()):
+        B = pair[0]
+        C = pair[1]
+        i = rel[pair][0]
+        w_E = merged_lengths_dict.get(E, 1)
+        w_F = merged_lengths_dict.get(F, 1)
+        w_C = merged_lengths_dict[C]
+        w_B = merged_lengths_dict[B]
+
+
+        if A != B and A != C: # Case 1 
             return rel
         
-        elif A == pair[0] and A != pair[1]: # Case A=B and A!=C
-            if merged_lengths_dict[E] > rel[pair][0] and (merged_lengths_dict[pair[1]]+1) > merged_lengths_dict[E]:
-                ...
-            elif merged_lengths_dict[E] < rel[pair][0] and (merged_lengths_dict[pair[1]]+1) <= merged_lengths_dict[E]:
-                ...
-            elif merged_lengths_dict[E] == rel[pair][0] and merged_lengths_dict[pair[1]] < merged_lengths_dict[F]:
-                ...
-            elif merged_lengths_dict[E] == rel[pair][0] and merged_lengths_dict[pair[1]] > merged_lengths_dict[F]:
-                ...
-            elif merged_lengths_dict[E] < rel[pair][0]:
-                ...
+        elif A == B and A != C: # Case 2
+            if w_E > i and (w_C+1) > w_E:
+                compute_rel(rel, (E,C), i)
+                compute_rel(rel, (C,F), (w_E - i))
+            elif w_E > i and (w_C+1) <= w_E:
+                compute_rel(rel, (E,C), i)
+            elif w_E == i and w_C <= w_F:
+                compute_rel(rel, (C,F), 0)
+            elif w_E == i and w_C > w_F:
+                compute_rel(rel, (F,C), 0)
+            elif w_E < i:
+                compute_rel(rel, (F,C), (i - w_E))
 
-        elif A != pair[0] and A == pair[1]: # Case A!=B and A=C
-            if (merged_lengths_dict[E]+1) >= merged_lengths_dict[pair[0]]:
-                ...
-            elif (merged_lengths_dict[E]+1) < merged_lengths_dict[pair[0]]:
-                ...
+        elif A != B and A == C: # Case 3
+            if (w_E+1) >= w_B:
+                compute_rel(rel, (B,E), i)
+            elif (w_E+1) < w_B:
+                compute_rel(rel, (B,E), i)
+                compute_rel(rel, (B,F), (w_E + i))
 
-        elif A == pair[0] and A == pair[1]: # Case A=B and A=C
-            if rel[pair][0] == 0:
-                return
-            elif merged_lengths_dict[E] > rel[pair][0] >= 1 and rel[pair][0] >= merged_lengths_dict[F]:
-                ...
-            elif merged_lengths_dict[E] > rel[pair][0] >= 1 and rel[pair][0] < merged_lengths_dict[F]:
-                ...
-            elif merged_lengths_dict[E] == rel[pair][0] and merged_lengths_dict[E] >= merged_lengths_dict[F]:
-                ...
-            elif merged_lengths_dict[E] == rel[pair][0] and merged_lengths_dict[E] < merged_lengths_dict[F]:
-                ...
-            elif merged_lengths_dict[E] < rel[pair][0] and rel[pair][0] >= merged_lengths_dict[F]:
-                ...
-            elif merged_lengths_dict[E] < rel[pair][0] and rel[pair][0] < merged_lengths_dict[F]:
-                compute_rel(rel, (F,E), (rel[pair][0] - merged_lengths_dict[E]))
+        elif A == B and A == C: # Case 4
+            if i == 0:
+                return rel
+            elif w_E > i >= 1 and i >= w_F:
+                compute_rel(rel, (E,E), i)
+                compute_rel(rel, (E,F), (w_E - i))
+            elif w_E > i >= 1 and i < w_F:
+                compute_rel(rel, (E,E), i) 
+                compute_rel(rel, (F,F), i)
+                compute_rel(rel, (E,F), (w_E - i))
+            elif w_E == i and w_E >= w_F:
+                compute_rel(rel, (E,F), 0)
+            elif w_E == i and w_E < w_F:
+                compute_rel(rel, (F,E), 0)
+                compute_rel(rel, (F,F), i)
+            elif w_E < i and i >= w_F:
+                compute_rel(rel, (F,E), (i - w_E))
+            elif w_E < i and i < w_F:
+                compute_rel(rel, (F,E), (i - w_E))
+                compute_rel(rel, (F,F), i)
 
     return rel
 
-def compute_compact(r):
-    compact = ()
+def compute_compact(rel):
     ...
 
 
@@ -129,7 +144,7 @@ if __name__ == '__main__':
     for A in desc_nonterminals:
         E, F = merged_grammar[A]
         rel = compute_split(A, rel, merged_lengths_dict, E, F)
-        rel = compute_compact(rel)
+        # rel = compute_compact(rel)
         # print(f'compact := {r}')
     
-    ...
+    print(rel)
