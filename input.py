@@ -1,9 +1,17 @@
 # Replace with your grammar. Every key is a nonterminal and its value is a list of symbols, which are either terminals or nonterminals.
-G = [
+
+G = ({"X": ["Y","Z"], "Y": ["Z","Z"], "Z": ["a","b"]},
+         {"T": ["U","b"], "U": ["a","V"], "V": ["W","W"], "W": ["b","a"]})
+
+# S = {("X","T"), ("X","U"), ("X","V"), ("X","W"), ("Y","T"), ("Y","U"), ("Y","V"), ("Y","W"), ("Z","T"), ("Z","U"), ("Z","V"), ("Z","W")}
+S = {("X","T")}
+
+old_G = [
     # 0. Simple Grammar
     {
     "S": ["A", "B"], # S → AB
-    "A": ["a", "C"], # 𝐴 → 𝑎C
+    "A": ["a", "C"], # 𝐴 → XC
+    "X": ["a"], # 𝑋 → 𝑎
     "B": ["d"], # 𝐵 → 𝑑
     "C": ["b", "c"] # C → bc
     },

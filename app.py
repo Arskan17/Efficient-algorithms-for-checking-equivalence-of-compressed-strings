@@ -2,10 +2,10 @@ from itertools import combinations # https://docs.python.org/3/library/itertools
 import input
 import sys
 
-def compute_all_pairs(grammar):
-    nonterminals = set(grammar.keys())  # Collect all nonterminals
-    S = set(combinations(nonterminals, 2))  # Generate all pairs
-    return S
+# def compute_all_pairs(grammar):
+#     nonterminals = set(grammar.keys())  # Collect all nonterminals
+#     S = set(combinations(nonterminals, 2))  # Generate all pairs
+#     return S
 
 def compute_lengths(grammar):
     lengths = {}
@@ -23,23 +23,64 @@ def compute_lengths(grammar):
 
     return lengths
 
-def check_lengths(S, lengths):
-    checks = [lengths[pair[0]] == lengths[pair[1]] for pair in S]
+def check_lengths(S, lengths_1, lengths_2):
+    # Check if |w_A| = |w_B| for each (A, B) in S
+    checks = [lengths_1[pair[0]] == lengths_2[pair[1]] for pair in S]
     return all(checks)
 
 def compute_descending_nonterminals(lengths):
     desc_nonterminals = sorted(lengths, key=lengths.get, reverse=True) # sort nonterminals in descending order according to |w_A|
     return desc_nonterminals
 
-def compute_rel(S):
-    rel = []
-    for pair in S:
-        rel.append((pair[0], pair[1], 0))  # Create a relation (A,B,0) for each pair in the set S
+def compute_rel(rel, pair, i):
+    # Create a relation (A,B,i) for each pair in the set S, or in our case, {"(A,B)": [i_1, i_2, ...]}
+    if pair not in rel:
+        rel[pair] = [i]
+    # If the pair already exists, append i to the list
+    else:
+        rel[pair].append(i)
     return rel
 
-def compute_split(A, r):
-    split = ()
-    ...
+def compute_split(A, rel, merged_lengths_dict, E, F):
+    for pair in rel.keys():
+        if A != pair[0] and A != pair[1]: # Case A!= B and A!=C
+            return rel
+        
+        elif A == pair[0] and A != pair[1]: # Case A=B and A!=C
+            if merged_lengths_dict[E] > rel[pair][0] and (merged_lengths_dict[pair[1]]+1) > merged_lengths_dict[E]:
+                ...
+            elif merged_lengths_dict[E] < rel[pair][0] and (merged_lengths_dict[pair[1]]+1) <= merged_lengths_dict[E]:
+                ...
+            elif merged_lengths_dict[E] == rel[pair][0] and merged_lengths_dict[pair[1]] < merged_lengths_dict[F]:
+                ...
+            elif merged_lengths_dict[E] == rel[pair][0] and merged_lengths_dict[pair[1]] > merged_lengths_dict[F]:
+                ...
+            elif merged_lengths_dict[E] < rel[pair][0]:
+                ...
+
+        elif A != pair[0] and A == pair[1]: # Case A!=B and A=C
+            if (merged_lengths_dict[E]+1) >= merged_lengths_dict[pair[0]]:
+                ...
+            elif (merged_lengths_dict[E]+1) < merged_lengths_dict[pair[0]]:
+                ...
+
+        elif A == pair[0] and A == pair[1]: # Case A=B and A=C
+            if rel[pair][0] == 0:
+                return
+            elif merged_lengths_dict[E] > rel[pair][0] >= 1 and rel[pair][0] >= merged_lengths_dict[F]:
+                ...
+            elif merged_lengths_dict[E] > rel[pair][0] >= 1 and rel[pair][0] < merged_lengths_dict[F]:
+                ...
+            elif merged_lengths_dict[E] == rel[pair][0] and merged_lengths_dict[E] >= merged_lengths_dict[F]:
+                ...
+            elif merged_lengths_dict[E] == rel[pair][0] and merged_lengths_dict[E] < merged_lengths_dict[F]:
+                ...
+            elif merged_lengths_dict[E] < rel[pair][0] and rel[pair][0] >= merged_lengths_dict[F]:
+                ...
+            elif merged_lengths_dict[E] < rel[pair][0] and rel[pair][0] < merged_lengths_dict[F]:
+                compute_rel(rel, (F,E), (rel[pair][0] - merged_lengths_dict[E]))
+
+    return rel
 
 def compute_compact(r):
     compact = ()
@@ -48,8 +89,9 @@ def compute_compact(r):
 
 if __name__ == '__main__':
     # input
-    grammar = input.G[0] # grammar G which defines a set of words
-    S = compute_all_pairs(grammar) # set S of pairs of nonterminals from G
+    grammar_1 = input.G[0] # grammar G which defines a set of words
+    grammar_2 = input.G[1]
+    S = input.S # set S of pairs of nonterminals
     print(f'set S = {S}')
 
 
@@ -60,23 +102,34 @@ if __name__ == '__main__':
 
 
     # begin
-    lengths = compute_lengths(grammar) # compute |w_A| for each nonterminal A
-    print(lengths)
+    lengths_1 = compute_lengths(grammar_1) # compute |w_A| for each nonterminal A
+    lengths_2 = compute_lengths(grammar_2)
+    print(lengths_1)
+    print(lengths_2)
     
-    if not check_lengths(S, lengths): # if there is (A, B) in S such that |w_A| != |w_B| then return false
+    if not check_lengths(S, lengths_1, lengths_2): # if there is (A, B) in S such that |w_A| != |w_B| then return false
         sys.exit(False)
 
-    desc_nonterminals = compute_descending_nonterminals(lengths) # ( A_1, ..., A_n) in descending order according to |w_A|
-    print(f'(A1, ..., An) := {desc_nonterminals}')
+    desc_nonterminals_1 = compute_descending_nonterminals(lengths_1) # ( A_1, ..., A_n) in descending order according to |w_A|
+    # print(f'(A1, ..., An) := {desc_nonterminals_1}')
+    desc_nonterminals_2 = compute_descending_nonterminals(lengths_2)
+    # print(f'(A1, ..., An) := {desc_nonterminals_2}')
 
-    rel = compute_rel(S) # compute relation rel := U(A,B) in S (A, B, 0); 
+    rel = {}
+    rel = compute_rel(rel, next(iter(S)), 0) # compute relation rel := U(A,B) in S (A, B, 0); 
     print(f'rel := {rel}')
 
-    # compute split and compact for each Ai with each (A, B) in rel until there are no nonterminals in triples of tel
+    # compute split and compact for each Ai with each (A, B) in rel until there are no nonterminals in triples of rel
+    merged_lengths_dict = {**lengths_1, **lengths_2}
+    desc_nonterminals = sorted(merged_lengths_dict, key=merged_lengths_dict.get, reverse=True)
+    print(f'(A1, ..., An) := {desc_nonterminals}')
+
+    merged_grammar = {**grammar_1, **grammar_2} # merge grammar_1 and grammar_2
+
     for A in desc_nonterminals:
-        for r in rel:
-            r = compute_split(A, r)
-            r = compute_compact(r)
-            # print(f'compact := {r}')
+        E, F = merged_grammar[A]
+        rel = compute_split(A, rel, merged_lengths_dict, E, F)
+        rel = compute_compact(rel)
+        # print(f'compact := {r}')
     
     ...
