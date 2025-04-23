@@ -1,4 +1,5 @@
 from itertools import combinations # https://docs.python.org/3/library/itertools.html#itertools.combinations
+from math import gcd # https://docs.python.org/3/library/math.html#math.gcd
 import input
 import sys
 
@@ -39,6 +40,7 @@ def compute_rel(rel, pair, i):
     # If the pair already exists, append i to the list
     else:
         rel[pair].append(i)
+        rel[pair] = list(set(rel[pair]))  # Remove duplicates
     return rel
 
 def compute_split(A, rel, merged_lengths_dict, E, F):
@@ -46,60 +48,82 @@ def compute_split(A, rel, merged_lengths_dict, E, F):
         B = pair[0]
         C = pair[1]
         i = rel[pair][0]
+        w_B = merged_lengths_dict.get(B, 1)
+        w_C = merged_lengths_dict.get(C, 1)
         w_E = merged_lengths_dict.get(E, 1)
         w_F = merged_lengths_dict.get(F, 1)
-        w_C = merged_lengths_dict[C]
-        w_B = merged_lengths_dict[B]
 
 
         if A != B and A != C: # Case 1 
-            return rel
+            rel
         
         elif A == B and A != C: # Case 2
-            if w_E > i and (w_C+1) > w_E:
-                compute_rel(rel, (E,C), i)
-                compute_rel(rel, (C,F), (w_E - i))
-            elif w_E > i and (w_C+1) <= w_E:
-                compute_rel(rel, (E,C), i)
+            if w_E > i and (w_C+i) > w_E:
+                rel = compute_rel(rel, (E,C), i)
+                rel = compute_rel(rel, (C,F), (w_E - i))
+            elif w_E > i and (w_C+i) <= w_E:
+                rel = compute_rel(rel, (E,C), i)
             elif w_E == i and w_C <= w_F:
-                compute_rel(rel, (C,F), 0)
+                rel = compute_rel(rel, (C,F), 0)
             elif w_E == i and w_C > w_F:
-                compute_rel(rel, (F,C), 0)
+                rel = compute_rel(rel, (F,C), 0)
             elif w_E < i:
-                compute_rel(rel, (F,C), (i - w_E))
+                rel = compute_rel(rel, (F,C), (i - w_E))
 
         elif A != B and A == C: # Case 3
-            if (w_E+1) >= w_B:
-                compute_rel(rel, (B,E), i)
-            elif (w_E+1) < w_B:
-                compute_rel(rel, (B,E), i)
-                compute_rel(rel, (B,F), (w_E + i))
+            if (w_E+i) >= w_B:
+                rel = compute_rel(rel, (B,E), i)
+            elif (w_E+i) < w_B:
+                rel = compute_rel(rel, (B,E), i)
+                rel = compute_rel(rel, (B,F), (w_E + i))
 
         elif A == B and A == C: # Case 4
             if i == 0:
-                return rel
+                rel
             elif w_E > i >= 1 and i >= w_F:
-                compute_rel(rel, (E,E), i)
-                compute_rel(rel, (E,F), (w_E - i))
+                rel = compute_rel(rel, (E,E), i)
+                rel = compute_rel(rel, (E,F), (w_E - i))
             elif w_E > i >= 1 and i < w_F:
-                compute_rel(rel, (E,E), i) 
-                compute_rel(rel, (F,F), i)
-                compute_rel(rel, (E,F), (w_E - i))
+                rel = compute_rel(rel, (E,E), i) 
+                rel = compute_rel(rel, (F,F), i)
+                rel = compute_rel(rel, (E,F), (w_E - i))
             elif w_E == i and w_E >= w_F:
-                compute_rel(rel, (E,F), 0)
+                rel = compute_rel(rel, (E,F), 0)
             elif w_E == i and w_E < w_F:
-                compute_rel(rel, (F,E), 0)
-                compute_rel(rel, (F,F), i)
+                rel = compute_rel(rel, (F,E), 0)
+                rel = compute_rel(rel, (F,F), i)
             elif w_E < i and i >= w_F:
-                compute_rel(rel, (F,E), (i - w_E))
+                rel = compute_rel(rel, (F,E), (i - w_E))
             elif w_E < i and i < w_F:
-                compute_rel(rel, (F,E), (i - w_E))
-                compute_rel(rel, (F,F), i)
+                rel = compute_rel(rel, (F,E), (i - w_E))
+                rel = compute_rel(rel, (F,F), i)
 
     return rel
 
-def compute_compact(rel):
-    ...
+def compute_compact(rel, merged_lengths_dict):
+    for key, values in rel.items():
+        if len(values) < 3:
+            continue  # Skip if there are fewer than 3 triples for this key
+
+        A, B = key
+        w_A = merged_lengths_dict.get(A, 1)
+
+        # Iterate through consecutive triplets in the sorted list
+        for index in range(len(values) - 2):
+            i, j, k = values[index], values[index + 1], values[index + 2]
+            if (j - i) + (k - i) <= w_A - i:
+                g = gcd(j - i, k - i)
+                # Replace the three triples with two triples
+                rel[key] = [i, i + g]
+                return rel  # Return immediately after the first successful replacement
+
+    # If no such triples are found, the operation fails
+    raise ValueError("SimpleCompact operation failed: No valid triples found.")
+
+def a_b_check(rel):
+    suffixes = [(key,values) for key, values in rel.items() if key[0].islower() and key[1].islower()]
+    print(f'suffixes := {suffixes}')
+    return all([(key[0] == key[1]) and (values[0] == 0) for key, values in suffixes])
 
 
 if __name__ == '__main__':
@@ -146,5 +170,5 @@ if __name__ == '__main__':
         rel = compute_split(A, rel, merged_lengths_dict, E, F)
         # rel = compute_compact(rel)
         # print(f'compact := {r}')
-    
     print(rel)
+    print(a_b_check(rel)) # if there exists (a,b,0) in rel and a!=b return false, else return true
