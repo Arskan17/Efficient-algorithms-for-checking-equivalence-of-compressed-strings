@@ -1,10 +1,53 @@
 # Replace with your grammar. Every key is a nonterminal and its value is a list of symbols, which are either terminals or nonterminals.
 
-G = ({"X": ["Y","Z"], "Y": ["Z","Z"], "Z": ["a","b"]},
-         {"T": ["U","b"], "U": ["a","V"], "V": ["W","W"], "W": ["b","a"]})
+# G = ({"X": ["Y","Z"], "Y": ["Z","Z"], "Z": ["a","b"]},
+#          {"T": ["U","b"], "U": ["a","V"], "V": ["W","W"], "W": ["b","a"]})
+# S = {("X","T")}
 
-# S = {("X","T"), ("X","U"), ("X","V"), ("X","W"), ("Y","T"), ("Y","U"), ("Y","V"), ("Y","W"), ("Z","T"), ("Z","U"), ("Z","V"), ("Z","W")}
-S = {("X","T")}
+# G = (
+#     # Grammar 1
+#     {
+#         "X": ["Y", "Z"],
+#         "Y": ["A", "B"],
+#         "Z": ["C", "D"],
+#         "A": ["a", "b"],
+#         "B": ["a", "b"],
+#         "C": ["a", "b"],
+#         "D": ["a", "b"]
+#     },
+#     # Grammar 2
+#     {
+#         "T": ["U", "V"],
+#         "U": ["E", "F"],
+#         "V": ["G", "H"],
+#         "E": ["a", "b"],
+#         "F": ["a", "b"],
+#         "G": ["a", "b"],
+#         "H": ["a", "b"]
+#     }
+# )
+# S = {("X", "T")}
+
+G = (
+    # Grammar 1
+    {
+        "A": ["B", "D"],
+        "B": ["E", "F"],
+        "D": ["b", "b"],
+        "E": ["a", "a"],
+        "C": ["b", "a"],
+        "F": ["C", "C"]
+    },
+    # Grammar 2
+    {
+        "X": ["Y", "Z"],
+        "Y": ["a", "R"],
+        "Z": ["R", "S"],
+        "R": ["a", "b"],
+        "S": ["R", "b"]
+    }
+)
+S = {("A", "X")}
 
 old_G = [
     # 0. Simple Grammar

@@ -100,25 +100,39 @@ def compute_split(A, rel, merged_lengths_dict, E, F):
 
     return rel
 
+def simple_compact(values, w_A):
+    if len(values) < 3:
+        return values # SimpleCompact fails given that there are fewer than 3 triples
+
+    i, j, k = values[0], values[1], values[2]
+    if (j - i) + (k - i) <= w_A - i:
+        g = gcd(j - i, k - i)
+        # new_values = [i, i + g] + values[3:]
+        return simple_compact(([i, i + g] + values[3:]), w_A)  # Recursively apply to the new list
+    
+    elif (j - i) + (k - i) > w_A - i:
+        return values
+
 def compute_compact(rel, merged_lengths_dict):
-    for key, values in rel.items():
-        if len(values) < 3:
-            continue  # Skip if there are fewer than 3 triples for this key
+    for (A,B), values in rel.items():
+        if A.isupper() and B.isupper():
+            if len(values) < 3:
+                continue  # Skip if there are fewer than 3 triples for this key
 
-        A, B = key
-        w_A = merged_lengths_dict.get(A, 1)
+            w_A = merged_lengths_dict.get(A, 1)
 
-        # Iterate through consecutive triplets in the sorted list
-        for index in range(len(values) - 2):
-            i, j, k = values[index], values[index + 1], values[index + 2]
-            if (j - i) + (k - i) <= w_A - i:
-                g = gcd(j - i, k - i)
-                # Replace the three triples with two triples
-                rel[key] = [i, i + g]
-                return rel  # Return immediately after the first successful replacement
+            # # Iterate through consecutive triplets in the sorted list
+            # for index in range(len(values) - 2):
+            #     i, j, k = values[index], values[index + 1], values[index + 2]
+            #     if (j - i) + (k - i) <= w_A - i:
+            #         g = gcd(j - i, k - i)
+            #         # Replace the three triples with two triples
+            #         rel[key] = [i, i + g]
+            #         return rel  # Return immediately after the first successful replacement
 
-    # If no such triples are found, the operation fails
-    raise ValueError("SimpleCompact operation failed: No valid triples found.")
+            rel[(A,B)] = simple_compact(values, w_A)
+    
+    return rel
 
 def a_b_check(rel):
     suffixes = [(key,values) for key, values in rel.items() if key[0].islower() and key[1].islower()]
@@ -168,7 +182,7 @@ if __name__ == '__main__':
     for A in desc_nonterminals:
         E, F = merged_grammar[A]
         rel = compute_split(A, rel, merged_lengths_dict, E, F)
-        # rel = compute_compact(rel)
+        rel = compute_compact(rel, merged_lengths_dict)
         # print(f'compact := {r}')
     print(rel)
     print(a_b_check(rel)) # if there exists (a,b,0) in rel and a!=b return false, else return true
