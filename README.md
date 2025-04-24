@@ -1,4 +1,4 @@
-# Efficient-algorithms-for-checking-equivalence-of-compressed-strings
+# Efficient algorithms for checking equivalence of compressed strings
 
 We describe a polynomial time algorithm for the following problem:  
 **The Problem:**  
