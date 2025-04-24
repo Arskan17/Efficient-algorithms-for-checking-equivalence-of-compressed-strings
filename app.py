@@ -3,10 +3,6 @@ from math import gcd # https://docs.python.org/3/library/math.html#math.gcd
 import input
 import sys
 
-# def compute_all_pairs(grammar):
-#     nonterminals = set(grammar.keys())  # Collect all nonterminals
-#     S = set(combinations(nonterminals, 2))  # Generate all pairs
-#     return S
 
 def compute_lengths(grammar):
     lengths = {}
@@ -120,16 +116,6 @@ def compute_compact(rel, merged_lengths_dict):
             continue  # Skip if there are fewer than 3 triples for this key
 
         w_A = merged_lengths_dict.get(A, 1)
-
-        # # Iterate through consecutive triplets in the sorted list
-        # for index in range(len(values) - 2):
-        #     i, j, k = values[index], values[index + 1], values[index + 2]
-        #     if (j - i) + (k - i) <= w_A - i:
-        #         g = gcd(j - i, k - i)
-        #         # Replace the three triples with two triples
-        #         rel[key] = [i, i + g]
-        #         return rel  # Return immediately after the first successful replacement
-
         rel[(A,B)] = simple_compact(values, w_A)
     
     return rel
@@ -142,8 +128,6 @@ def a_b_check(rel):
 
 if __name__ == '__main__':
     # input
-    # grammar_1 = input.G[0] # grammar G which defines a set of words
-    # grammar_2 = input.G[1]
     grammar = input.G
     S = input.S # set S of pairs of nonterminals
     print(f'set S = {S}')
@@ -156,36 +140,28 @@ if __name__ == '__main__':
 
 
     # begin
-    # lengths_1 = compute_lengths(grammar_1) # compute |w_A| for each nonterminal A
-    # lengths_2 = compute_lengths(grammar_2)
-    # print(lengths_1)
-    # print(lengths_2)
     lengths = compute_lengths(grammar) # compute |w_A| for each nonterminal A
     print(lengths)
     
     if not check_lengths(S, lengths): # if there is (A, B) in S such that |w_A| != |w_B| then return false
         sys.exit(False)
 
-    # desc_nonterminals_1 = compute_descending_nonterminals(lengths_1) # ( A_1, ..., A_n) in descending order according to |w_A|
-    # # print(f'(A1, ..., An) := {desc_nonterminals_1}')
-    # desc_nonterminals_2 = compute_descending_nonterminals(lengths_2)
-    # print(f'(A1, ..., An) := {desc_nonterminals_2}')
-
     rel = {}
     rel = compute_rel(rel, next(iter(S)), 0) # compute relation rel := U(A,B) in S (A, B, 0); 
     print(f'rel := {rel}')
 
     # compute split and compact for each Ai with each (A, B) in rel until there are no nonterminals in triples of rel
-    merged_lengths_dict = {**lengths} # {**lengths_1, **lengths_2}
+    merged_lengths_dict = {**lengths}
     desc_nonterminals = sorted(merged_lengths_dict, key=merged_lengths_dict.get, reverse=True)
     print(f'(A1, ..., An) := {desc_nonterminals}')
 
-    merged_grammar = {**grammar} # {**grammar_1, **grammar_2} # merge grammar_1 and grammar_2
+    merged_grammar = {**grammar}
 
     for A in desc_nonterminals:
         E, F = merged_grammar[A]
         rel = compute_split(A, rel, merged_lengths_dict, E, F)
+        # print(f'split_({A},rel) := {rel}')
         rel = compute_compact(rel, merged_lengths_dict)
-        # print(f'compact := {r}')
+        # print(f'compact_rel := {rel}')
     print(f'end_rel := {rel}')
     print(a_b_check(rel)) # if there exists (a,b,0) in rel and a!=b return false, else return true
