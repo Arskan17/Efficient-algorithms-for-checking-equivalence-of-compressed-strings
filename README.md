@@ -12,9 +12,21 @@ This allows to compute the length of every word from *W* in polynomial time.
 
 ## Input
 The algorithm gets two inputs,
-- a grammar *G* which defines a set of words.  
-        e.g. *G* = S → AB, 𝐴 → 𝑎C, C → bc, 𝐵 → 𝑑  
-        the set of words *W* = {"abcd", "abc", "bc", "d"}  
-        the set lengths |*w*| for each nonterminal, {'C': 2, 'A': 3, 'B': 1, 'S': 4}
+- a set *G* containing two grammars that describe a word.  
+        e.g. *G* = X → YZ, Y → ZZ, Z → ab,  
+                   T → Ub, U → aV, V → WW, W → ba
 - a set *S* of pairs of nonterminals from *G*.  
-        *S* = {('S', 'A'), ('S', 'C'), ('S', 'B'), ('A', 'C'), ('A', 'B'), ('C', 'B')}
+        *S* = {('X', 'T')}  
+        At the begining, this set contains the two start nonterminals from both grammars.
+
+Add the inputs inside the file `input.py` like so  
+![alt text](image.png)
+
+The algorithm then computes 
+- a descending sorted list of nonterminals according to *`|w_A|`*,  ['X', 'T', 'U', 'Y', 'V', 'Z', 'W']
+- the set of lengths |*w*| for each nonterminal, {'Z': 2, 'Y': 4, 'X': 6, 'W': 2, 'V': 4, 'U': 5, 'T': 6}
+
+It further applies *`Split`* and *`Compact`* on rel, for every descending nonterminal.  
+At the end, it checks if there exists any tripples *`(a,b,0)`* in *`rel`*, where *a!=b*.  
+If that's the case it returns *`False`*, signifying that the two grammars in *`G`* produce different words.  
+If not, the grammars are equal, and it returns *`True`*.

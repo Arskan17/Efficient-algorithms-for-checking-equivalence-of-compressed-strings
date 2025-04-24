@@ -1,8 +1,8 @@
 # Replace with your grammar. Every key is a nonterminal and its value is a list of symbols, which are either terminals or nonterminals.
 
-# G = {"X": ["Y","Z"], "Y": ["Z","Z"], "Z": ["a","b"],
-#          "T": ["U","b"], "U": ["a","V"], "V": ["W","W"], "W": ["b","a"]}
-# S = {("X","T")}
+G = {"X": ["Y","Z"], "Y": ["Z","Z"], "Z": ["a","b"],
+         "T": ["U","b"], "U": ["a","V"], "V": ["W","W"], "W": ["b","a"]}
+S = {("X","T")}
 
 # G = {
 #         "X": ["Y", "Z"],        "Y": ["A", "B"],        "Z": ["C", "D"],        "A": ["a", "b"],        "B": ["a", "b"],        "C": ["a", "b"],        "D": ["a", "b"],
