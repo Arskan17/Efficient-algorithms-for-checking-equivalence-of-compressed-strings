@@ -30,3 +30,12 @@ It further applies *`Split`* and *`Compact`* on rel, for every descending nonter
 At the end, it checks if there exists any tripples *`(a,b,0)`* in *`rel`*, where *a!=b*.  
 If that's the case it returns *`False`*, signifying that the two grammars in *`G`* produce different words.  
 If not, the grammars are equal, and it returns *`True`*.
+
+
+## Run
+
+To run the programm, Make sure you have python3 installed. Here's a [download link](https://www.python.org/downloads/) if needed.  
+Clone and open the repo locally.  
+Execute the `app.py` file.  
+A couple examples are present inside the `input.py` file. You can uncoment one at the time to run the programm. Just make sure to keep the same form (a set *G* with both grammars, and a set *S* witht the two initial nonterminals)  
+![alt text](image.png)
