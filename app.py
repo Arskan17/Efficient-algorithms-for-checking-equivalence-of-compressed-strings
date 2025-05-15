@@ -2,6 +2,7 @@ from itertools import combinations # https://docs.python.org/3/library/itertools
 from math import gcd # https://docs.python.org/3/library/math.html#math.gcd
 import input
 import sys
+import time
 
 
 def compute_lengths(grammar):
@@ -41,8 +42,7 @@ def compute_rel(rel, pair, i):
 
 def compute_split(A, rel, merged_lengths_dict, E, F):
     for pair in list(rel.keys()):
-        B = pair[0]
-        C = pair[1]
+        B, C = pair
         i = rel[pair][0]
         w_B = merged_lengths_dict.get(B, 1)
         w_C = merged_lengths_dict.get(C, 1)
@@ -144,6 +144,7 @@ if __name__ == '__main__':
     print(lengths)
     
     if not check_lengths(S, lengths): # if there is (A, B) in S such that |w_A| != |w_B| then return false
+        print('False')
         sys.exit(False)
 
     rel = {}
