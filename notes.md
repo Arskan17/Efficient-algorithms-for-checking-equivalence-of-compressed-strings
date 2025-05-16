@@ -7,7 +7,7 @@ Re-implement fib_prod_G1 and fib_prod_G2 to get two distinct CFGs representing P
 - two types of tests. 
    - practical data and record duration.
    - Fibonacci words.
-   - unary strings, e.g. A0 -> a, A1 -? A0 A0, ..., An -> An-1 An-1
-   - compare 
+   - unary strings, e.g. A0 -> a, A1 -> A0 A0, ..., An -> An-1 An-1
+   - compare the two representations of the word, in binary and in terrnary form. For example: ![alt text](IMG_0387.JPG)
 
 - plot graph and see how the algorthm scales with respect to size, for each testing parameters

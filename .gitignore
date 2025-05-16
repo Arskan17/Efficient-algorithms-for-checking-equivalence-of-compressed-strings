@@ -174,3 +174,7 @@ cython_debug/
 .pypirc
 
 pizza&chille corpus/
+
+G*.json
+misc.py
+questions.txt

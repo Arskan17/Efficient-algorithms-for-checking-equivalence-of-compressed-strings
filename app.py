@@ -2,7 +2,6 @@ from itertools import combinations # https://docs.python.org/3/library/itertools
 from math import gcd # https://docs.python.org/3/library/math.html#math.gcd
 import input
 import sys
-import time
 
 
 def compute_lengths(grammar):
