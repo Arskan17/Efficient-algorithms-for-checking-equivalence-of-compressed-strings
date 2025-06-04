@@ -47,7 +47,7 @@ class SLP:
             sequence = new_sequence
 
         # Step 2: Only wrap remaining sequence if needed
-        # self.start = self._final_wrap(sequence)
+        self.start = self._final_wrap(sequence)
         return self
 
     def _final_wrap(self, sequence):
@@ -91,10 +91,10 @@ class SLP:
 
 if __name__ == "__main__":
     # s = "abababbabbababbbabaababbabbabbabbababbabbabbababbabababbababbbabbaababbababbabababbabababbbabbabababbabbaba"
-    file = "dna.50MB"
-    with open(f"pizza&chille corpus/{file}", "r") as f:
+    file = "test_string_re-pair.txt"
+    with open(f"{file}", "r") as f:
         s = f.read()
     slp = SLP()
     slp.repair(s)
     print(f"Done compressing {file}")
-    slp.save_to_json(f"testing_dataset/pizza&chille corpus_SLP/{file}_SLP_1.json")
+    slp.save_to_json(f"testing_dataset/random_strings_SLP/{file}_size-605264_SLP_11.json")
