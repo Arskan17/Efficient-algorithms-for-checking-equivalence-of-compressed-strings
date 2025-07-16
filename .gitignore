@@ -173,7 +173,7 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-pizza&chille corpus/
+# pizza&chille corpus/
 
 G*.json
 misc.py
