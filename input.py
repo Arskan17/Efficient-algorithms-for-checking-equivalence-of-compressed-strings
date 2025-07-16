@@ -39,10 +39,10 @@
 import json
 
 # Load G1.json and G2.json
-with open("G1.json", "r") as g1_file:
+with open("testing_dataset/random_strings_SLP/test_string_re-pair_size605264_F.json", "r") as g1_file:
     G1 = json.load(g1_file)
 
-with open("G2.json", "r") as g2_file:
+with open("testing_dataset/random_strings_SLP/test_string_re-pair_size605264_H.json", "r") as g2_file:
     G2 = json.load(g2_file)
 
 G = {**G1, **G2}  # Merge the two grammars

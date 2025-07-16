@@ -31,7 +31,7 @@ def monitor_resources(process, running_flag, interval=0.001):
 if __name__ == '__main__':
     # fib_string_num = [1,2,4,8,16,32,64,128,256,512]
     # for nu in fib_string_num:
-        i_th_fib_string = 400
+        i_th_fib_string = 250
         fib_prod_G1.m(i_th_fib_string)
         fib_prod_G2.m(i_th_fib_string)
         dataset = 32

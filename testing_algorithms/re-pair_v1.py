@@ -87,12 +87,12 @@ class SLP:
 
 
 if __name__ == "__main__":
-    # s = "abababbabbababbbabaababbabbabbabbababbabbabbababbabababbababbbabbaababbababbabababbabababbbabbabababbabbaba"
-    file = "dna.50MB"
-    with open(f"pizza&chille corpus/{file}", "r") as f:
-        s = f.read()
+    s = "abbabba"
+    # file = "dna.50MB"
+    # with open(f"pizza&chille corpus/{file}", "r") as f:
+    #     s = f.read()
     slp = SLP()
     slp.repair(s)
-    print(f"Done compressing {file}")
-    slp.save_to_json(f"testing_dataset/pizza&chille corpus_SLP/{file}_SLP.json")
-    # slp.print_rules()
+    # print(f"Done compressing {file}")
+    # slp.save_to_json(f"testing_dataset/pizza&chille corpus_SLP/{file}_SLP.json")
+    slp.print_rules()
