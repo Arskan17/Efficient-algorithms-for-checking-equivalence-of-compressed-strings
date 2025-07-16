@@ -17,10 +17,9 @@
 # S = {("A", "X")}
 
 # G = {
-#     'F3': ['a', 'b'], 'F4': ['F3', 'a'], 'F5': ['F4', 'F3'],
-#     'H3': ['a', 'b'], 'H4': ['H3', 'a'], 'HC_5': ['H4', 'H3'], 'H5': ['HC_5', '']
+#     'F3': ['a', 'b'], 'F4': ['F3', 'a'], 'F5': ['F4', 'F3']
 # }
-# S = {('F5', 'H5')}
+# S = {('F5', 'F5')}
 
 # Fib 22
 # G = { 
@@ -39,10 +38,10 @@
 import json
 
 # Load G1.json and G2.json
-with open("testing_dataset/random_strings_SLP/test_string_re-pair_size605264_F.json", "r") as g1_file:
+with open("testing_dataset/pizza&chille corpus_SLP/test_string_re-pair_dna-32KiB-1_F.json", "r") as g1_file:
     G1 = json.load(g1_file)
 
-with open("testing_dataset/random_strings_SLP/test_string_re-pair_size605264_H.json", "r") as g2_file:
+with open("testing_dataset/pizza&chille corpus_SLP/test_string_re-pair_dna-32KiB-2_H.json", "r") as g2_file:
     G2 = json.load(g2_file)
 
 G = {**G1, **G2}  # Merge the two grammars

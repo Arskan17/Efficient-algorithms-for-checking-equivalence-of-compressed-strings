@@ -152,8 +152,14 @@ def main():
     compressor = RePairCompressor(nonterminal=nonterminal)
 
     # read file
+    si = 32
     with open("pizza&chille corpus/dna.50MB", "r", encoding='utf-8') as f:
-        test_string = f.read(1024 * 1024)  # Read first 128 KB for testing
+        test_string = f.read(si * si).lower()  # Read first 128 KB for testing
+        # test_string_list = list(test_string)
+        # test_string_list[3]="g"
+        # test_string_list[-1]="g"
+        # test_string = ''.join(test_string_list)
+
 
     # test_string = "atscgghgfcttashffggccffghttgassta"
     print(f"Original string: {test_string}")
@@ -165,9 +171,9 @@ def main():
     print(f"Start symbol: {start_symbol}")
     
     # Save to file
-    file_name = f"test_string_re-pair_dna-50MB_{nonterminal}.json"
+    file_name = f"test_string_re-pair_dna-{si}KiB-1_{nonterminal}.json"
     compressor.save_grammar(grammar, f"testing_dataset/pizza&chille corpus_SLP/{file_name}")
-    print("Grammar saved to {file_name}")
+    print(f"Grammar saved to {file_name}")
 
 if __name__ == "__main__":
     main()

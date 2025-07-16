@@ -39,14 +39,14 @@ def compute_rel(rel, pair, i):
         rel[pair] = list(set(rel[pair]))  # Remove duplicates
     return rel
 
-def compute_split(A, rel, merged_lengths_dict, E, F):
+def compute_split(A, rel, lengths, E, F):
     for pair in list(rel.keys()):
         B, C = pair
         i = rel[pair][0]
-        w_B = merged_lengths_dict.get(B, 1)
-        w_C = merged_lengths_dict.get(C, 1)
-        w_E = merged_lengths_dict.get(E, 1)
-        w_F = merged_lengths_dict.get(F, 1)
+        w_B = lengths.get(B, 1)
+        w_C = lengths.get(C, 1)
+        w_E = lengths.get(E, 1)
+        w_F = lengths.get(F, 1)
 
 
         if A != B and A != C: # Case 1 
@@ -108,13 +108,13 @@ def simple_compact(values, w_A):
     elif (j - i) + (k - i) > w_A - i:
         return values
 
-def compute_compact(rel, merged_lengths_dict):
+def compute_compact(rel, lengths):
     for (A,B), values in rel.items():
         # if A.isupper() and B.isupper():
         if len(values) < 3:
             continue  # Skip if there are fewer than 3 triples for this key
 
-        w_A = merged_lengths_dict.get(A, 1)
+        w_A = lengths.get(A, 1)
         rel[(A,B)] = simple_compact(values, w_A)
     
     return rel
@@ -140,10 +140,10 @@ if __name__ == '__main__':
 
     # begin
     lengths = compute_lengths(grammar) # compute |w_A| for each nonterminal A
-    print(lengths)
+    print(f"lengths: {lengths}")
     
     if not check_lengths(S, lengths): # if there is (A, B) in S such that |w_A| != |w_B| then return false
-        print('False')
+        print('False : lengths not the same')
         sys.exit(False)
 
     rel = {}
@@ -151,17 +151,14 @@ if __name__ == '__main__':
     print(f'rel := {rel}')
 
     # compute split and compact for each Ai with each (A, B) in rel until there are no nonterminals in triples of rel
-    merged_lengths_dict = {**lengths}
-    desc_nonterminals = sorted(merged_lengths_dict, key=merged_lengths_dict.get, reverse=True)
+    desc_nonterminals = sorted(lengths, key=lengths.get, reverse=True)
     print(f'(A1, ..., An) := {desc_nonterminals}')
 
-    merged_grammar = {**grammar}
-
     for A in desc_nonterminals:
-        E, F = merged_grammar[A]
-        rel = compute_split(A, rel, merged_lengths_dict, E, F)
+        E, F = grammar[A]
+        rel = compute_split(A, rel, lengths, E, F)
         # print(f'split_({A},rel) := {rel}')
-        rel = compute_compact(rel, merged_lengths_dict)
+        rel = compute_compact(rel, lengths)
         # print(f'compact_rel := {rel}')
     print(f'end_rel := {rel}')
     print(a_b_check(rel)) # if there exists (a,b,0) in rel and a!=b return false, else return true
