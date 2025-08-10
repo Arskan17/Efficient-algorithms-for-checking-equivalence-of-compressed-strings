@@ -45,6 +45,6 @@ with open("testing_dataset/pizza&chille corpus_SLP/dna-1KiB-B.json", "r") as g2_
     G2 = json.load(g2_file)
 
 G = {**G1, **G2}  # Merge the two grammars
-S = {(list(G1.keys())[-1], list(G2.keys())[-1])}  # Use the last keys from both grammars as the start symbol
+S = {('A', 'B')}  # Use the last keys from both grammars as the start symbol
 # print("Merged Grammar:", G)
 # print("Start Symbols:", S)

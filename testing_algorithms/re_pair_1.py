@@ -42,7 +42,7 @@ def get_final_rule(input_string: list, non_terminal: str, replacement_character_
             result.append(input_string[i])
             i += 1
     
-    return result, sub_rules
+    return result, sub_rules, replacement_character_id
 
 def re_pair(input_string: list, non_terminal: str) -> dict:
     Rules = {}
@@ -74,9 +74,7 @@ def re_pair(input_string: list, non_terminal: str) -> dict:
 
     left, right = input_string[:-1], input_string[-1]
     while len(left) > 1:
-        replacement_character = f"{non_terminal}{replacement_character_id}"
-
-        left, sub_rules = get_final_rule(input_string=left, non_terminal=non_terminal, replacement_character_id=replacement_character_id)
+        left, sub_rules, replacement_character_id = get_final_rule(input_string=left, non_terminal=non_terminal, replacement_character_id=replacement_character_id)
         Rules = {**Rules, **sub_rules}
 
     start_node = (left[0], right)

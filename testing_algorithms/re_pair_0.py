@@ -41,8 +41,8 @@ def get_final_rule(input_string: list, non_terminal: str, replacement_character_
         else:
             result.append(input_string[i])
             i += 1
-    
-    return result, sub_rules
+
+    return result, sub_rules, replacement_character_id
 
 def re_pair(input_string: list, non_terminal: str) -> dict:
     Rules = {}
@@ -72,11 +72,10 @@ def re_pair(input_string: list, non_terminal: str) -> dict:
         input_string = replace_bigrams(input_string, bigram, replacement_character)
         Rules[replacement_character] = bigram
 
+    # Final step. Convert the last string (with no bigram having occurence more than 1) to new rules, so as to get a starting node.
     left, right = input_string[0], input_string[1:]
     while len(right) > 1:
-        replacement_character = f"{non_terminal}{replacement_character_id}"
-
-        right, sub_rules = get_final_rule(input_string=right, non_terminal=non_terminal, replacement_character_id=replacement_character_id)
+        right, sub_rules, replacement_character_id = get_final_rule(input_string=right, non_terminal=non_terminal, replacement_character_id=replacement_character_id)
         Rules = {**Rules, **sub_rules}
 
     start_node = (left, right[0])

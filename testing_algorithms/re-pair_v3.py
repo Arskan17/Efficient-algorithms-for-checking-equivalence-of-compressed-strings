@@ -152,9 +152,9 @@ def main():
     compressor = RePairCompressor(nonterminal=nonterminal)
 
     # read file
-    si = 32
+    si = 1
     with open("pizza&chille corpus/dna.50MB", "r", encoding='utf-8') as f:
-        test_string = f.read(si * si).lower()  # Read first 128 KB for testing
+        test_string = f.read(1024 * si).lower()  # Read first 128 KB for testing
         # test_string_list = list(test_string)
         # test_string_list[3]="g"
         # test_string_list[-1]="g"
