@@ -85,6 +85,6 @@ def re_pair(input_string: list, non_terminal: str) -> dict:
 
 
 if __name__ == "__main__":
-    input_string = 'aaaabaaaabaab'
+    input_string = 'abaababa'
     non_terminal = 'A'
     print(re_pair(input_string=input_string, non_terminal=non_terminal))
