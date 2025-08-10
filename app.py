@@ -124,8 +124,7 @@ def a_b_check(rel):
     print(f'suffixes := {suffixes}')
     return all([(key[0] == key[1]) and (values[0] == 0) for key, values in suffixes])
 
-
-if __name__ == '__main__':
+def main():
     # input
     grammar = input.G
     S = input.S # set S of pairs of nonterminals
@@ -162,3 +161,7 @@ if __name__ == '__main__':
         # print(f'compact_rel := {rel}')
     print(f'end_rel := {rel}')
     print(a_b_check(rel)) # if there exists (a,b,0) in rel and a!=b return false, else return true
+
+
+if __name__ == '__main__':
+    main()

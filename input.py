@@ -38,10 +38,10 @@
 import json
 
 # Load G1.json and G2.json
-with open("testing_dataset/pizza&chille corpus_SLP/test_string_re-pair_dna-32KiB-1_F.json", "r") as g1_file:
+with open("testing_dataset/pizza&chille corpus_SLP/dna-1KiB-A.json", "r") as g1_file:
     G1 = json.load(g1_file)
 
-with open("testing_dataset/pizza&chille corpus_SLP/test_string_re-pair_dna-32KiB-2_H.json", "r") as g2_file:
+with open("testing_dataset/pizza&chille corpus_SLP/dna-1KiB-B.json", "r") as g2_file:
     G2 = json.load(g2_file)
 
 G = {**G1, **G2}  # Merge the two grammars
