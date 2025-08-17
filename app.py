@@ -120,7 +120,7 @@ def compute_compact(rel, lengths):
     return rel
 
 def a_b_check(rel):
-    suffixes = [(key,values) for key, values in rel.items() if key[0].islower() and key[1].islower()]
+    suffixes = [(key,values) for key, values in rel.items() if not key[0].isupper() and not key[1].isupper()]
     print(f'suffixes := {suffixes}')
     return all([(key[0] == key[1]) and (values[0] == 0) for key, values in suffixes])
 

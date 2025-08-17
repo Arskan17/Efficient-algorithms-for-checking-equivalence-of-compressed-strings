@@ -38,13 +38,13 @@
 import json
 
 # Load G1.json and G2.json
-with open("testing_dataset/random_strings_SLP/test_string_re-pair_size605264_H.json", "r") as g1_file:
+with open("testing_dataset/pizza&chille corpus_SLP/dblp.xml/xml-1KiB-A.json", "r") as g1_file:
     G1 = json.load(g1_file)
 
-with open("testing_dataset/random_strings_SLP/test_string_re-pair_size605264_F.json", "r") as g2_file:
+with open("testing_dataset/pizza&chille corpus_SLP/dblp.xml/xml-1KiB-B.json", "r") as g2_file:
     G2 = json.load(g2_file)
 
 G = {**G1, **G2}  # Merge the two grammars
-S = {('H121', 'F121')}  # Use the last keys from both grammars as the start symbol
+S = {('A', 'B')}  # Use the last keys from both grammars as the start symbol
 # print("Merged Grammar:", G)
 # print("Start Symbols:", S)
