@@ -35,24 +35,19 @@ def get_final_rule(input_string: list, non_terminal: str, replacement_character_
         if i < len(input_string)-1:
             replacement_character = f"{non_terminal}{replacement_character_id}"
             replacement_character_id += 1
-            
+
             result.append(replacement_character)
             sub_rules[replacement_character] = (input_string[i], input_string[i+1])
             i += 2
         else:
             result.append(input_string[i])
             i += 1
-    
+
     return result, sub_rules, replacement_character_id
 
 def re_pair(input_string: list, non_terminal: str) -> dict:
     Rules = {}
-    # Step 1. Replace each symbol a ∈ Σ with a new variable v_a and add v_a → a to R.
-    # For this I just create a list with individual characters from the input string.
-    # **O(n)**
-    input_string = list(input_string.lower())
     replacement_character_id = 0
-    # Skip step 1. since we won't need v_a → a
 
     while True:
         # Step 2. Find the most frequent pair p in T.
@@ -73,18 +68,22 @@ def re_pair(input_string: list, non_terminal: str) -> dict:
         input_string = replace_bigrams(input_string, bigram, replacement_character)
         Rules[replacement_character] = bigram
 
-    left, right = input_string[:-1], input_string[-1]
-    while len(left) > 1:
-        left, sub_rules, replacement_character_id = get_final_rule(input_string=left, non_terminal=non_terminal, replacement_character_id=replacement_character_id)
+    # Final step. Convert the last string (with no bigram having occurence more than 1) to new rules, so as to get a starting node.
+    left, right = input_string[0], input_string[1:]
+    while len(right) > 1:
+        right, sub_rules, replacement_character_id = get_final_rule(input_string=right, non_terminal=non_terminal, replacement_character_id=replacement_character_id)
         Rules = {**Rules, **sub_rules}
 
-    start_node = (left[0], right)
+    start_node = (left, right[0])
     Rules[non_terminal] = start_node
 
     return Rules
 
+def main(length: int):
+    input_string = 'a' * length
+    non_terminal = 'A'
+    return re_pair(input_string=input_string, non_terminal=non_terminal)
+
 
 if __name__ == "__main__":
-    input_string = 'aaaabaaaabaab'
-    non_terminal = 'A'
-    print(re_pair(input_string=input_string, non_terminal=non_terminal))
+    main(length=13)

@@ -32,9 +32,10 @@ def get_final_rule(input_string: list, non_terminal: str, replacement_character_
     i = 0
 
     while i < len(input_string):
-        replacement_character = f"{non_terminal}{replacement_character_id}"
-        replacement_character_id += 1
         if i < len(input_string)-1:
+            replacement_character = f"{non_terminal}{replacement_character_id}"
+            replacement_character_id += 1
+            
             result.append(replacement_character)
             sub_rules[replacement_character] = (input_string[i], input_string[i+1])
             i += 2
