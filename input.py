@@ -38,13 +38,14 @@
 import json
 
 # Load G1.json and G2.json
-with open("testing_dataset/unary_string_SLP/base_2_128MiB-A.json", "r") as g1_file:
+with open("G1.json", "r") as g1_file:
     G1 = json.load(g1_file)
 
-with open("testing_dataset/unary_string_SLP/base_3_128MiB-B.json", "r") as g2_file:
+with open("G2.json", "r") as g2_file:
     G2 = json.load(g2_file)
 
 G = {**G1, **G2}  # Merge the two grammars
-S = {('A', 'B')}  # Use the last keys from both grammars as the start symbol
+# S = {('A125', 'F250')}  # Use the last keys from both grammars as the start symbol
+S = {(list(G1.keys())[-1], list(G2.keys())[-1])}  # Use the last keys from both grammars as the start symbol
 # print("Merged Grammar:", G)
 # print("Start Symbols:", S)

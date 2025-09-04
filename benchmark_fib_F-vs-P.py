@@ -3,7 +3,8 @@ import time
 import subprocess
 import threading
 import testing_algorithms.fib_prod_F as fib_prod_F
-import fib_prod_G2
+import testing_algorithms.fib_prod_P as fib_prod_P
+import json
 import csv
 import os
 import tqdm
@@ -29,11 +30,17 @@ def monitor_resources(process, running_flag, interval=0.001):
     return avg_cpu, avg_memory
 
 if __name__ == '__main__':
-    # fib_string_num = [1,2,4,8,16,32,64,128,256,512]
-    # for nu in fib_string_num:
-        i_th_fib_string = 250
-        fib_prod_F.m(i_th_fib_string)
-        fib_prod_G2.m(i_th_fib_string)
+    fib_string_num = [256]
+    for nu in fib_string_num:
+        i_th_fib_string = nu
+
+        G1 = fib_prod_F.m(i_th_fib_string) # produce the first grammar the normal way
+        with open("G1.json", "w") as f:
+            f.write(json.dumps(G1))
+        G2 = fib_prod_P.fib_P(i_th_fib_string) # produce the second grammar using the alternate P variant
+        with open("G2.json", "w") as f:
+            f.write(json.dumps(G2))
+
         dataset = 32
 
         for i in tqdm.tqdm(range(dataset)):
@@ -68,7 +75,7 @@ if __name__ == '__main__':
                 print(f"Average CPU usage: {avg_cpu:.2f}%")
                 print(f"Average RAM usage: {avg_memory:.2f} MB")
 
-            csv_file = "benchmark_results.csv"
+            csv_file = "benchmark_fibonacci_F-vs-P.csv"
             fieldnames = ["fib_index", "duration_sec", "avg_ram_mb"]
 
             # Check if file exists to write header only once
@@ -84,4 +91,4 @@ if __name__ == '__main__':
                     "avg_ram_mb": avg_memory
                 })
 
-            time.sleep(0.1)  # Sleep for a short time to avoid cuncurrent processes
+            time.sleep(0.1)  # Sleep for a short time to avoid concurrent processes

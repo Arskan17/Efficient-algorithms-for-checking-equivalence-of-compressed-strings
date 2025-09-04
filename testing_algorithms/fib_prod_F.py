@@ -82,8 +82,10 @@ def m(index):
         # print(fibonacci_productions)
 
         # Save the productions to a JSON file
-        with open("G1.json", "w") as f:
-            f.write(json.dumps(fibonacci_productions))
+        # with open("G1.json", "w") as f:
+        #     f.write(json.dumps(fibonacci_productions))
+
+        return fibonacci_productions
 
 
 if __name__ == "__main__":
