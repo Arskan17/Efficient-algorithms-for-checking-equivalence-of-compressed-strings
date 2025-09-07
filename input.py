@@ -38,10 +38,10 @@
 import json
 
 # Load G1.json and G2.json
-with open("G1.json", "r") as g1_file:
+with open("fib_F_250.json", "r") as g1_file:
     G1 = json.load(g1_file)
 
-with open("G2.json", "r") as g2_file:
+with open("testing_dataset/fibonacci/fib_P_250.json", "r") as g2_file:
     G2 = json.load(g2_file)
 
 G = {**G1, **G2}  # Merge the two grammars

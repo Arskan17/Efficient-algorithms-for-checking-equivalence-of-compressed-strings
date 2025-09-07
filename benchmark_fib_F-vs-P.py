@@ -30,9 +30,9 @@ def monitor_resources(process, running_flag, interval=0.001):
     return avg_cpu, avg_memory
 
 if __name__ == '__main__':
-    fib_string_num = [256]
+    fib_string_num = list(range(1, 33))
     for nu in fib_string_num:
-        i_th_fib_string = nu
+        i_th_fib_string = nu*32
 
         G1 = fib_prod_F.m(i_th_fib_string) # produce the first grammar the normal way
         with open("G1.json", "w") as f:
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         with open("G2.json", "w") as f:
             f.write(json.dumps(G2))
 
-        dataset = 32
+        dataset = 7
 
         for i in tqdm.tqdm(range(dataset)):
             running_flag = [True]
